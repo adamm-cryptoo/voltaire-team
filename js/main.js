@@ -162,10 +162,6 @@ function renderMatches() {
 
 /* ---------- TEAM PAGE ---------- */
 function renderTeam() {
-  document.getElementById("team-about").textContent = TEAM.about;
-  document.getElementById("coach").innerHTML = TEAM.coach
-    ? `<div class="coach-card"><span class="coach-label">Coach</span><strong>${esc(TEAM.coach)}</strong></div>`
-    : "";
 
   const groups = ["Goalkeeper", "Defender", "Midfielder", "Forward"];
   const plural = { Goalkeeper: "Goalkeepers", Defender: "Defenders", Midfielder: "Midfielders", Forward: "Forwards" };
