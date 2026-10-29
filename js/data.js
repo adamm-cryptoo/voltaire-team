@@ -70,14 +70,15 @@ const PLAYERS = [
   { name: "A. Abdrabo",   number: 4,  position: "Defender",   captain: false },
   { name: "Y. Dabbous", number: 3,  position: "Defender",   captain: false },
   { name: "Zein Ezz",  number 67: ,  position: "Defender",   captain: false },
-  { name: "Yakan",  number: 11,  position: "Midfielder", captain: false  },
+  { name: "Yakan",  number: 11,  position: "Defender", captain: false  },
   { name: "Arabi",   number 6: , position: "Midfielder", captain: false },
   { name: "Asser", number: 7,  position: "Forward",    captain: false },
-  { name: "Selim", number: 8,  position: "Forward",    captain: false },
+  { name: "Selim", number: 8,  position: "Midfielder",    captain: false },
    { name: "Malek", number: 9, position: "Forward", captain: false },
-   { name: "A. Kashef", number: 10, position: "Forward", captain: false },
+   { name: "A. Kashef", number: 10, position: "Midfielder", captain: false },
    { name: "H. Nahas", number: 69, position: "Defender", captain: false },
    { name: "Z. Soliman", number 12, position: "Defender", captain: false},
+   { name: "H. Kortam", number 2, position: "Defender", captain: false}
 ];
 
 /* ---------- 4. FIELD ---------- */
