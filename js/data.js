@@ -70,7 +70,7 @@ const PLAYERS = [
   { name: "A. Abdrabo",   number: 4,  position: "Defender",   captain: false },
   { name: "Y. Dabbous", number: 3,  position: "Defender",   captain: false },
   { name: "Zein Ezz",  number: 67 ,  position: "Defender",   captain: false },
-  { name: "Yakan",  number: 11,  position: "Defender", captain: false  },
+  { name: "Yakan",  number: 11,  position: "Forward", captain: false  },
   { name: "Arabi",   number: 6 , position: "Midfielder", captain: false },
   { name: "Asser", number: 7,  position: "Forward",    captain: false },
   { name: "Selim", number: 8,  position: "Midfielder",    captain: false },
