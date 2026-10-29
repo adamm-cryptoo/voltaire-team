@@ -77,8 +77,8 @@ const PLAYERS = [
    { name: "Malek", number: 9, position: "Forward", captain: false },
    { name: "A. Kashef", number: 10, position: "Midfielder", captain: false },
    { name: "H. Nahas", number: 69, position: "Defender", captain: false },
-   { name: "Z. Soliman", number 12, position: "Defender", captain: false},
-   { name: "H. Kortam", number 2, position: "Defender", captain: false}
+   { name: "Z. Soliman", number: 12, position: "Defender", captain: false},
+   { name: "H. Kortam", number: 2, position: "Defender", captain: false}
 ];
 
 /* ---------- 4. FIELD ---------- */
