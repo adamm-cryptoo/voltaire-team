@@ -35,6 +35,8 @@ const MATCHES = [
     location: "Ng university",
     ourScore: null, theirScore: null,
     notes: "Arrive Early."
+     availability: { "Player One": "yes", "Player Two": "no", "Player Three": "maybe" },
+  opponentPlayers: ["Ali S.", "Karim A.", "Youssef M."]
   },
   {
     date: "2026-11-12", time: "16:00",
