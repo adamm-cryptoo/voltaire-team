@@ -241,32 +241,33 @@ renderLeaders()
 }
 
 /* ---------- FIELD PAGE ---------- */
-function renderField() {
-  document.getElementById("field-name").textContent = FIELD.name;
-  document.getElementById("field-desc").textContent = FIELD.description;
-  document.getElementById("field-address").textContent = FIELD.address;
-  document.getElementById("field-surface").textContent = FIELD.surface;
-  document.getElementById("field-size").textContent = FIELD.size;
 
-  document.getElementById("field-facilities").innerHTML =
-    FIELD.facilities.map(f => `<li>${esc(f)}</li>`).join("");
-  document.getElementById("field-rules").innerHTML =
-    FIELD.rules.map(r => `<li>${esc(r)}</li>`).join("");
-  document.getElementById("field-training").innerHTML =
-    FIELD.trainingSchedule.map(t =>
-      `<tr><td>${esc(t.day)}</td><td>${esc(t.time)}</td></tr>`).join("");
-
-  const mapBox = document.getElementById("field-map");
-  if (FIELD.mapEmbedUrl) {
-    mapBox.innerHTML = `<iframe src="${esc(FIELD.mapEmbedUrl)}" loading="lazy"
-      title="Map of the field" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>`;
-  } else {
-    mapBox.style.display = "none";
-  }
-
-  const dir = document.getElementById("field-directions");
-  if (FIELD.mapLink) { dir.href = FIELD.mapLink; } else { dir.style.display = "none"; }
+function fieldCard(m) {
+  const map = m.mapEmbedUrl
+    ? `<div class="map-box"><iframe src="${esc(m.mapEmbedUrl)}" loading="lazy"
+         title="Map of ${esc(m.location)}" allowfullscreen
+         referrerpolicy="no-referrer-when-downgrade"></iframe></div>`
+    : "";
+  const directions = m.mapLink
+    ? `<p style="margin-top:14px"><a class="btn btn-green" href="${esc(m.mapLink)}" target="_blank" rel="noopener">🧭 Get directions</a></p>`
+    : "";
+  return `
+    <article class="card field-card">
+      <span class="match-date">${formatDate(m.date)} · ${esc(m.time)}</span>
+      <h3 class="field-title">📍 ${esc(m.location)}</h3>
+      <p class="field-vs">${esc(TEAM.shortName)} vs ${esc(m.opponent)}</p>
+      ${m.fieldAddress ? `<p class="match-place">${esc(m.fieldAddress)}</p>` : ""}
+      ${map}${directions}
+    </article>`;
 }
+
+function renderField() {
+  const list = upcomingMatches();
+  document.getElementById("field-list").innerHTML = list.length
+    ? list.map(fieldCard).join("")
+    : `<p class="empty">No upcoming matches yet, so there are no fields to show.</p>`;
+}
+
 
 /* ---------- Start everything when the page loads ---------- */
 document.addEventListener("DOMContentLoaded", () => {
