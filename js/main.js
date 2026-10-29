@@ -222,7 +222,10 @@ function renderTeam() {
     return `<h3 class="group-title">${plural[pos]}</h3><div class="grid">${cards}</div>`;
   }).join("");
 
-   function renderLeaders() {
+  
+}
+
+ function renderLeaders() {
   const st = playerStats();
   const fill = (id, key) => {
     const rows = PLAYERS.map(p => ({ name: p.name, n: st[p.name][key] }))
@@ -234,7 +237,6 @@ function renderTeam() {
   fill("top-scorers", "goals");
   fill("top-assists", "assists");
   fill("top-keepers", "cleanSheets");
-}
 }
 
 /* ---------- FIELD PAGE ---------- */
