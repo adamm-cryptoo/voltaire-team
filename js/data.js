@@ -30,25 +30,24 @@ const TEAM = {
    • date format is YYYY-MM-DD, time is 24-hour HH:MM            */
 const MATCHES = [
   {
-    date: "2026-11-04", time: "9:00 pm",
-    opponent: "Albert Camus",
-    location: "Ng University Field",
-     fieldAddress: "Street, area, city",
+    date: "TBD", time: "TBD",
+    opponent: "TBD",
+    location: "TBD",
+     fieldAddress: "",
      mapLink: "",
      mapEmbedUrl:"",
     ourScore: null, theirScore: null,
-    notes: "Arrive Early.",
-     availability: { "Y. Tayel": "no", "Omar": "maybe", "A. Abdrabo": "yes", "Y. Dabbous": "yes" },
-  opponentPlayers: ["Mansour", "Ali", "Mohamed"],
+    notes: "",
+     availability: {},
+  opponentPlayers: [],
   },
   {
-    date: "2026-10-25", time: "9:00 pm",
-    opponent: "MLS",
-    location: "Ng Uni",
-    ourScore: 8, theirScore: 5,
+    date: "TBD", time: "TBD",
+    opponent: "TBD",
+    location: "TBD",
+    ourScore: null, theirScore: null,
     notes: "",
-     goals: [
-        { scorer: "Y. Dabbous", assist: "A. Abdrabo"}],
+     goals: [],
   },
   {
     date: "TBD", time: "TBD",
