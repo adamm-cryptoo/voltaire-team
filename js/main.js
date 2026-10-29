@@ -221,6 +221,20 @@ function renderTeam() {
       </div>`).join("");
     return `<h3 class="group-title">${plural[pos]}</h3><div class="grid">${cards}</div>`;
   }).join("");
+
+   function renderLeaders() {
+  const st = playerStats();
+  const fill = (id, key) => {
+    const rows = PLAYERS.map(p => ({ name: p.name, n: st[p.name][key] }))
+      .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 5);
+    document.getElementById(id).innerHTML = rows.length
+      ? rows.map((x, i) => `<tr><td>${i + 1}. ${esc(x.name)}</td><td>${x.n}</td></tr>`).join("")
+      : `<tr><td>No data yet</td><td></td></tr>`;
+  };
+  fill("top-scorers", "goals");
+  fill("top-assists", "assists");
+  fill("top-keepers", "cleanSheets");
+}
 }
 
 /* ---------- FIELD PAGE ---------- */
