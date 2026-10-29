@@ -571,6 +571,13 @@ tr:last-child td {
 .chip.maybe { background: #fff2cc; color: #7a5a00; border-color: #f0d98a; }
 .goals { margin-top: 12px; font-size: .92rem; line-height: 1.7; }
 
+/* --------- field edit ---------  */
+
+.field-card .match-date { display: block; margin-bottom: 6px; }
+.field-title { font-size: 1.2rem; color: var(--green-dark); margin: 4px 0 2px; }
+.field-vs { color: var(--muted); font-weight: 600; }
+.field-card .map-box iframe { height: 240px; }
+
 
 /* ---------- Phones ---------- */
 @media (max-width: 700px) {
