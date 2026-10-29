@@ -33,6 +33,9 @@ const MATCHES = [
     date: "2026-11-04", time: "9:00 pm",
     opponent: "Albert Camus",
     location: "Ng University Field",
+     fieldAddress: "Street, area, city",
+     mapLink: "",
+     mapEmbedUrl:"",
     ourScore: null, theirScore: null,
     notes: "Arrive Early.",
      availability: { "Y. Tayel": "no", "Omar": "maybe", "A. Abdrabo": "yes", "Y. Dabbous": "yes" },
@@ -83,20 +86,6 @@ const PLAYERS = [
    { name: "H. Kortam", number: 2, position: "Defender", captain: false}
 ];
 
-/* ---------- 4. FIELD ---------- */
-const FIELD = {
-  name: "ng field",
-  address: "nnn",
-  description: "nnn",
-  surface: "nnn",
-  size: "nnn",
-  facilities: ["nnn", "nnn"],
-  rules: [
-    "nnn"
-  ],
-  // To show a map: open Google Maps → find your field → Share → "Embed a map"
-  // → copy ONLY the link inside src="..." and paste it here. Leave "" to hide the map.
-  mapEmbedUrl: "",
-  // Normal Google Maps link for the "Get directions" button. "" to hide.
-  mapLink: ""
-};
+
+
+ 
