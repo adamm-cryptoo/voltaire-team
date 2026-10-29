@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Field | Our Football Team</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body data-page="field">
+
+  <header id="site-header"></header>
+
+  <div class="hero page-hero">
+    <div class="container">
+      <h1>Our Field</h1>
+      <p>Where we play and train</p>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <section>
+      <h2 id="field-name"></h2>
+      <p class="lead" id="field-desc"></p>
+
+      <div class="info-list">
+        <div class="info-item">
+          <div class="k">Address</div>
+          <div class="v" id="field-address"></div>
+        </div>
+        <div class="info-item">
+          <div class="k">Surface</div>
+          <div class="v" id="field-surface"></div>
+        </div>
+        <div class="info-item">
+          <div class="k">Game format</div>
+          <div class="v" id="field-size"></div>
+        </div>
+      </div>
+
+      <div class="map-box" id="field-map"></div>
+      <p style="margin-top:16px"><a class="btn btn-green" id="field-directions" href="#" target="_blank"
+          rel="noopener">🧭 Get directions</a></p>
+    </section>
+
+    <section>
+      <div class="two-col">
+        <div>
+          <h2>Training times</h2>
+          <div class="card">
+            <table id="field-training"></table>
+          </div>
+        </div>
+        <div>
+          <h2>Facilities</h2>
+          <div class="card">
+            <ul class="clean" id="field-facilities"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Field rules</h2>
+      <div class="card">
+        <ul class="clean" id="field-rules"></ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
