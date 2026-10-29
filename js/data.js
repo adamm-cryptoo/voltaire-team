@@ -16,7 +16,7 @@ const TEAM = {
   coach: "",                // Put "" if you have no coach
   // WhatsApp number for the "Challenge us" button.
   // Use country code, NO plus sign, NO spaces. Example Egypt: 201001234567
-  whatsapp: "",
+  whatsapp: "201006842754",
   email: "",
   instagram: ""                        // Full link, or "" to hide it
 };
