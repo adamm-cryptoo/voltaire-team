@@ -46,11 +46,11 @@ const MATCHES = [
     notes: ""
   },
   {
-    date: "2026-11-15", time: "15:30",
-    opponent: "Grade 11 B",
-    location: "Our school field",
+    date: "TBD", time: "TBD",
+    opponent: "TBD",
+    location: "TBD",
     ourScore: null, theirScore: null,
-    notes: "Great teamwork!"
+    notes: ""
   },
   {
     date: "TBD", time: "TBD",
