@@ -65,15 +65,19 @@ const MATCHES = [
    position must be one of: "Goalkeeper", "Defender", "Midfielder", "Forward"
    captain: true  → shows a "C" badge (only one player should have it) */
 const PLAYERS = [
-  { name: "Y. Tayel",   number: 99,  position: "Goalkeeper", captain: false },
-  { name: "Omar", number: 99, position: "Goalkeeper", captain: false },
-  { name: "A. Abdrabo",   number: 99,  position: "Defender",   captain: false },
-  { name: "Y. Dabbous", number: 99,  position: "Defender",   captain: false },
-  { name: "nnn",  number: 99,  position: "Defender",   captain: false },
-  { name: "Player Five",  number: 99,  position: "Midfielder", captain: false  },
-  { name: "Player Six",   number: 99, position: "Midfielder", captain: false },
-  { name: "Player Seven", number: 99,  position: "Forward",    captain: false },
-  { name: "Player Eight", number: 99,  position: "Forward",    captain: false }
+  { name: "Y. Tayel",   number: 1,  position: "Goalkeeper", captain: false },
+  { name: "Omar", number: 16, position: "Goalkeeper", captain: false },
+  { name: "A. Abdrabo",   number: 4,  position: "Defender",   captain: false },
+  { name: "Y. Dabbous", number: 3,  position: "Defender",   captain: false },
+  { name: "Zein Ezz",  number 67: ,  position: "Defender",   captain: false },
+  { name: "Yakan",  number: 11,  position: "Midfielder", captain: false  },
+  { name: "Arabi",   number 6: , position: "Midfielder", captain: false },
+  { name: "Asser", number: 7,  position: "Forward",    captain: false },
+  { name: "Selim", number: 8,  position: "Forward",    captain: false },
+   { name: "Malek", number: 9, position: "Forward", captain: false },
+   { name: "A. Kashef", number: 10, position: "Forward", captain: false },
+   { name: "H. Nahas", number: 69, position: "Defender", captain: false },
+   { name: "Z. Soliman", number 12, position: "Defender", captain: false},
 ];
 
 /* ---------- 4. FIELD ---------- */
