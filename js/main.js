@@ -222,7 +222,7 @@ function renderTeam() {
       </div>`).join("");
     return `<h3 class="group-title">${plural[pos]}</h3><div class="grid">${cards}</div>`;
   }).join("");
-
+renderLeaders()
   
 }
 
