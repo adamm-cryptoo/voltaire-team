@@ -30,18 +30,18 @@ const TEAM = {
    • date format is YYYY-MM-DD, time is 24-hour HH:MM            */
 const MATCHES = [
   {
-    date: "2026-11-03", time: "9:00 pm",
-    opponent: "Albert Camus",
-    location: "Ng university",
+    date: "TBD", time: "TBD",
+    opponent: "TBD",
+    location: "TBD",
     ourScore: null, theirScore: null,
     notes: "Arrive Early.",
-     availability: { "Player One": "yes", "Player Two": "no", "Player Three": "maybe" },
-  opponentPlayers: ["Ali S.", "Karim A.", "Youssef M."],
+     availability: { "": "", "": "", "": "" },
+  opponentPlayers: ["", "", ""],
   },
   {
-    date: "2026-11-12", time: "16:00",
-    opponent: "Grade 12 Eagles",
-    location: "Their school field",
+    date: "TBD", time: "TBD",
+    opponent: "TBD",
+    location: "TBD",
     ourScore: null, theirScore: null,
     notes: ""
   },
@@ -53,9 +53,9 @@ const MATCHES = [
     notes: "Great teamwork!"
   },
   {
-    date: "2026-11-16", time: "15:30",
-    opponent: "Grade 9 Sharks",
-    location: "Our school field",
+    date: "TBD", time: "TBD",
+    opponent: "TBD",
+    location: "TBD",
     ourScore: null, theirScore: null,
     notes: ""
   }
