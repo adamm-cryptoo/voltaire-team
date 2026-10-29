@@ -30,12 +30,12 @@ const TEAM = {
    • date format is YYYY-MM-DD, time is 24-hour HH:MM            */
 const MATCHES = [
   {
-    date: "2026-11-4", time: "9:00 pm",
+    date: "2026-11-04", time: "9:00 pm",
     opponent: "Albert Camus",
     location: "Ng University Field",
     ourScore: null, theirScore: null,
     notes: "Arrive Early.",
-     availability: { "Y. Tayel": "No", "Omar": "Yes", "A. Abdrabo": "Yes", "Y. Dabbous": "Yes" },
+     availability: { "Y. Tayel": "no", "Omar": "maybe", "A. Abdrabo": "yes", "Y. Dabbous": "yes" },
   opponentPlayers: ["Mansour", "Ali", "Mohamed"],
   },
   {
@@ -84,7 +84,7 @@ const PLAYERS = [
 ];
 
 /* ---------- 4. FIELD ---------- */
-const FIELDS = {
+const FIELD = {
   name: "ng field",
   address: "nnn",
   description: "nnn",
