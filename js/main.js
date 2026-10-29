@@ -77,6 +77,47 @@ function buildFooter() {
     </div>`;
 }
 
+function playerStats() {
+  const stats = {};
+  PLAYERS.forEach(p => stats[p.name] = { goals: 0, assists: 0, cleanSheets: 0 });
+  pastMatches().forEach(m => {
+    (m.goals || []).forEach(g => {
+      if (stats[g.scorer]) stats[g.scorer].goals++;
+      if (g.assist && stats[g.assist]) stats[g.assist].assists++;
+    });
+    if (m.theirScore === 0 && m.goalkeeper && stats[m.goalkeeper]) stats[m.goalkeeper].cleanSheets++;
+  });
+  return stats;
+}
+function teamCleanSheets() {
+  return pastMatches().filter(m => m.theirScore === 0).length;
+}
+
+function goalsHtml(m) {
+  if (!m.goals || !m.goals.length) return "";
+  return `<div class="goals">` + m.goals.map(g =>
+    `⚽ ${esc(g.scorer)}${g.assist ? ` <small>(assist: ${esc(g.assist)})</small>` : ""}`
+  ).join("<br>") + `</div>`;
+}
+function cleanSheetHtml(m) {
+  return isFinished(m) && m.theirScore === 0
+    ? `<p class="match-notes">🧤 Clean sheet${m.goalkeeper ? " — " + esc(m.goalkeeper) : ""}</p>` : "";
+}
+function availabilityHtml(m) {
+  if (!m.availability) return "";
+  const label = { yes: "Available", no: "Not available", maybe: "Maybe", none: "No reply" };
+  const yes = Object.values(m.availability).filter(v => v === "yes").length;
+  const chips = PLAYERS.map(p => {
+    const s = m.availability[p.name] || "none";
+    return `<span class="chip ${s}" title="${label[s]}">${esc(p.name)}</span>`;
+  }).join("");
+  return `<details class="more"><summary>Availability (${yes}/${PLAYERS.length} confirmed)</summary><div class="chips">${chips}</div></details>`;
+}
+function opponentHtml(m) {
+  if (!m.opponentPlayers || !m.opponentPlayers.length) return "";
+  return `<details class="more"><summary>${esc(m.opponent)} players</summary><p>${m.opponentPlayers.map(n => esc(n)).join(" · ")}</p></details>`;
+}
+
 /* ---------- Match card (used on Home and Matches pages) ---------- */
 function matchCard(m) {
   const done = isFinished(m);
@@ -102,7 +143,7 @@ function matchCard(m) {
         <span class="team-b">${esc(m.opponent)}</span>
       </div>
       <p class="match-place">📍 ${esc(m.location)}</p>
-      ${m.notes ? `<p class="match-notes">${esc(m.notes)}</p>` : ""}
+      ${m.notes ? `<p class="match-notes">${esc(m.notes)}</p>` : ""}${cleanSheetHtml(m)}${goalsHtml(m)}${availabilityHtml(m)}${opponentHtml(m)}
     </article>`;
 }
 
@@ -138,7 +179,7 @@ function renderHome() {
   const draws = past.filter(m => m.ourScore === m.theirScore).length;
   const losses = past.filter(m => m.ourScore < m.theirScore).length;
   const stats = [
-    ["Played", past.length], ["Wins", wins], ["Draws", draws], ["Losses", losses]
+    ["Played", past.length], ["Wins", wins], ["Draws", draws], ["Losses", losses], ["Clean sheets", teamCleanSheets()]
   ];
   document.getElementById("stats").innerHTML = stats.map(s =>
     `<div class="stat"><span class="stat-num">${s[1]}</span><span class="stat-label">${s[0]}</span></div>`
