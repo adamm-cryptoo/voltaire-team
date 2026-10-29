@@ -159,7 +159,7 @@ function renderHome() {
   document.getElementById("hero-title").textContent = TEAM.name;
   document.getElementById("hero-motto").textContent = TEAM.motto;
   document.getElementById("hero-challenge").href = whatsappLink();
-  document.getElementById("about-text").textContent = TEAM.about;
+ 
 
   // Next match
   const next = upcomingMatches()[0];
