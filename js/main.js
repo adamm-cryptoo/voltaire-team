@@ -7,12 +7,13 @@
 
 // Turn "2026-11-05" into "Thu, 5 Nov 2026"
 function formatDate(dateString) {
+  // If it isn't a real date like 2026-11-05 (for example "TBD"), show it as written
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return dateString;
   const d = new Date(dateString + "T00:00:00");
   return d.toLocaleDateString("en-GB", {
     weekday: "short", day: "numeric", month: "short", year: "numeric"
   });
 }
-
 // Safely put text into HTML (stops weird characters from breaking the page)
 function esc(text) {
   const div = document.createElement("div");
