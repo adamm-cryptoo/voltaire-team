@@ -557,6 +557,21 @@ tr:last-child td {
   margin-top: 6px;
 }
 
+
+/* --------- stats edit --------- */
+
+.stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } /* replaces the 4-column rule */
+.more { margin-top: 12px; font-size: .92rem; }
+.more summary { cursor: pointer; font-weight: 700; color: var(--green-dark); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { padding: 3px 10px; border-radius: 999px; font-size: .82rem; font-weight: 600;
+        background: #eef1ef; color: var(--muted); border: 1px solid var(--line); }
+.chip.yes   { background: #dff3e6; color: #11633a; border-color: #b7e0c5; }
+.chip.no    { background: #fde4e5; color: #a3222b; border-color: #f4b9bc; text-decoration: line-through; }
+.chip.maybe { background: #fff2cc; color: #7a5a00; border-color: #f0d98a; }
+.goals { margin-top: 12px; font-size: .92rem; line-height: 1.7; }
+
+
 /* ---------- Phones ---------- */
 @media (max-width: 700px) {
   .menu-btn {
