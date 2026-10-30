@@ -6,13 +6,25 @@
 /* ---------- Small helper functions ---------- */
 
 // Turn "2026-11-05" into "Thu, 5 Nov 2026"
+// Turns "2026-11-4" or "2026-11-04" into "2026-11-04". Anything else (like "TBD") gives null.
+function normDate(dateString) {
+  const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(dateString).trim());
+  return m ? `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}` : null;
+}
+
+// Turn "2026-11-05" into "Thu, 5 Nov 2026"
 function formatDate(dateString) {
-  // If it isn't a real date like 2026-11-05 (for example "TBD"), show it as written
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return dateString;
-  const d = new Date(dateString + "T00:00:00");
+  const iso = normDate(dateString);
+  if (!iso) return dateString;               // e.g. "TBD": show it as written
+  const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString("en-GB", {
     weekday: "short", day: "numeric", month: "short", year: "numeric"
   });
+}
+
+// Sorting key: real dates sort by date, "TBD" goes last
+function dateKey(m) {
+  return normDate(m.date) || "9999-99-99";
 }
 // Safely put text into HTML (stops weird characters from breaking the page)
 function esc(text) {
@@ -104,12 +116,16 @@ function cleanSheetHtml(m) {
   return isFinished(m) && m.theirScore === 0
     ? `<p class="match-notes">🧤 Clean sheet${m.goalkeeper ? " — " + esc(m.goalkeeper) : ""}</p>` : "";
 }
+function statusOf(m, name) {
+  const s = String((m.availability || {})[name] || "").trim().toLowerCase();
+  return ["yes", "no", "maybe"].includes(s) ? s : "none";
+}
 function availabilityHtml(m) {
   if (!m.availability) return "";
   const label = { yes: "Available", no: "Not available", maybe: "Maybe", none: "No reply" };
-  const yes = Object.values(m.availability).filter(v => v === "yes").length;
+  const yes = PLAYERS.filter(p => statusOf(m, p.name) === "yes").length;
   const chips = PLAYERS.map(p => {
-    const s = m.availability[p.name] || "none";
+    const s = statusOf(m, p.name);
     return `<span class="chip ${s}" title="${label[s]}">${esc(p.name)}</span>`;
   }).join("");
   return `<details class="more"><summary>Availability (${yes}/${PLAYERS.length} confirmed)</summary><div class="chips">${chips}</div></details>`;
@@ -305,12 +321,11 @@ function matchCard(m) {
 }
 
 function upcomingMatches() {
-  return MATCHES.filter(m => !isFinished(m)).sort((a, b) => a.date.localeCompare(b.date));
+  return MATCHES.filter(m => !isFinished(m)).sort((a, b) => dateKey(a).localeCompare(dateKey(b)));
 }
 function pastMatches() {
-  return MATCHES.filter(isFinished).sort((a, b) => b.date.localeCompare(a.date));
+  return MATCHES.filter(isFinished).sort((a, b) => dateKey(b).localeCompare(dateKey(a)));
 }
-
 /* ---------- HOME PAGE ---------- */
 function renderHome() {
   document.getElementById("hero-title").textContent = TEAM.name;
