@@ -21,6 +21,8 @@ const TEAM = {
   instagram: ""                        // Full link, or "" to hide it
 };
 
+const AVAILABILITY_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQTSIBuooq2ajM2siK-6jxlGbPL-xNZJ0AJ5Koey-B4y-QvemAHEtAhTAgk0QdyHl9BFf00HyPw-Ix/pub?gid=1008038772&single=true&output=csv";
+
 /* ---------- 2. MATCHES ----------
    Add one block { ... }, per match. Order does not matter —
    the website sorts them by date automatically.
