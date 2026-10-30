@@ -56,7 +56,7 @@ function buildHeader() {
         <span>${esc(TEAM.shortName)}</span>
       </a>
       <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false">☰</button>
-      <nav id="main-nav">${links}</nav>
+            <nav id="main-nav">${links}<button class="theme-btn" id="theme-btn" aria-label="Toggle dark mode">🌙</button></nav>
     </div>`;
 
   const btn = document.getElementById("menu-btn");
@@ -300,6 +300,7 @@ function matchCard(m) {
       </div>
       <p class="match-place">📍 ${esc(m.location)}</p>
       ${m.notes ? `<p class="match-notes">${esc(m.notes)}</p>` : ""}${cleanSheetHtml(m)}${goalsHtml(m)}${availabilityHtml(m)}${opponentHtml(m)}
+        ${actionsHtml(m)}
     </article>`;
 }
 
@@ -340,11 +341,12 @@ function renderHome() {
   document.getElementById("stats").innerHTML = stats.map(s =>
     `<div class="stat"><span class="stat-num">${s[1]}</span><span class="stat-label">${s[0]}</span></div>`
   ).join("");
+   startCountdown();
 }
 
 /* ---------- MATCHES PAGE ---------- */
 function renderMatches() {
-  document.getElementById("challenge-btn").href = whatsappLink();
+ 
 
   const up = upcomingMatches();
   document.getElementById("upcoming-list").innerHTML = up.length
@@ -367,7 +369,7 @@ function renderTeam() {
     const list = PLAYERS.filter(p => p.position === pos).sort((a, b) => a.number - b.number);
     if (!list.length) return "";
     const cards = list.map(p => `
-      <div class="card player">
+           <div class="card player" data-player="${esc(p.name)}">
         <div class="shirt">${esc(p.number)}</div>
         <div>
           <strong>${esc(p.name)}</strong>
@@ -377,7 +379,8 @@ function renderTeam() {
       </div>`).join("");
     return `<h3 class="group-title">${plural[pos]}</h3><div class="grid">${cards}</div>`;
   }).join("");
-renderLeaders()
+renderLeaders();
+   setUpPlayerSearch();
   
 }
 
@@ -427,10 +430,23 @@ function renderField() {
 /* ---------- Start everything when the page loads ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   buildHeader();
+  setupTheme();
   buildFooter();
-  const page = document.body.dataset.page;      // set in each HTML file
+  const page = document.body.dataset.page;
   if (page === "home") renderHome();
   if (page === "matches") renderMatches();
   if (page === "team") renderTeam();
   if (page === "field") renderField();
+});
+
+document.addEventListener("click", e => {
+  const ics = e.target.closest("[data-ics]");
+  if (ics) return downloadICS(MATCHES[+ics.dataset.ics]);
+  const sh = e.target.closest("[data-share]");
+  if (sh) return shareMatch(MATCHES[+sh.dataset.share]);
+  const pl = e.target.closest("[data-player]");
+  if (pl) return showPlayer(pl.dataset.player);
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") document.querySelectorAll(".modal").forEach(m => m.remove());
 });
