@@ -119,6 +119,161 @@ function opponentHtml(m) {
   return `<details class="more"><summary>${esc(m.opponent)} players</summary><p>${m.opponentPlayers.map(n => esc(n)).join(" · ")}</p></details>`;
 }
 
+/* ---------- Kick-off time (used by countdown and calendar) ---------- */
+function kickoff(m) {
+  const iso = normDate(m.date);
+  if (!iso) return null;                                   // "TBD" gives null
+  const t = /^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i.exec(String(m.time).trim());
+  if (!t) return null;
+  let h = +t[1];
+  const min = +(t[2] || 0), ap = (t[3] || "").toLowerCase();
+  if (ap === "pm" && h < 12) h += 12;
+  if (ap === "am" && h === 12) h = 0;
+  const [y, mo, d] = iso.split("-").map(Number);
+  return new Date(y, mo - 1, d, h, min);
+}
+
+/* ---------- Buttons on each match card ---------- */
+function actionsHtml(m) {
+  const i = MATCHES.indexOf(m);
+  const cal = !isFinished(m) && kickoff(m)
+    ? `<button class="btn-mini" data-ics="${i}">📅 Add to calendar</button>` : "";
+  return `<div class="actions">${cal}<button class="btn-mini" data-share="${i}">📤 Share</button></div>`;
+}
+
+function downloadICS(m) {
+  const k = kickoff(m);
+  if (!k) return;
+  const f = d => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  const safe = s => String(s).replace(/[,;]/g, "\\$&");
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Team//EN", "BEGIN:VEVENT",
+    "UID:" + f(k) + "@team", "DTSTAMP:" + f(new Date()),
+    "DTSTART:" + f(k), "DTEND:" + f(new Date(k.getTime() + 90 * 60000)),
+    "SUMMARY:" + safe(TEAM.shortName + " vs " + m.opponent),
+    "LOCATION:" + safe(m.location), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  a.download = "match.ics";
+  a.click();
+}
+
+function shareMatch(m) {
+  const text = isFinished(m)
+    ? `${TEAM.shortName} ${m.ourScore} - ${m.theirScore} ${m.opponent}`
+    : `${TEAM.shortName} vs ${m.opponent} - ${formatDate(m.date)} ${m.time}, ${m.location}`;
+  const url = location.href.split("#")[0];
+  if (navigator.share) navigator.share({ title: TEAM.name, text, url }).catch(() => {});
+  else window.open("https://wa.me/?text=" + encodeURIComponent(text + "\n" + url), "_blank", "noopener");
+}
+
+/* ---------- Countdown (Home page) ---------- */
+function startCountdown() {
+  const box = document.getElementById("countdown");
+  if (!box) return;
+  const next = upcomingMatches().find(m => { const k = kickoff(m); return k && k > new Date(); });
+  if (!next) { box.style.display = "none"; return; }
+  const target = kickoff(next);
+  function tick() {
+    let s = Math.max(0, Math.floor((target - new Date()) / 1000));
+    const days = Math.floor(s / 86400); s %= 86400;
+    const hrs = Math.floor(s / 3600);   s %= 3600;
+    const mins = Math.floor(s / 60);    s %= 60;
+    box.innerHTML = `<div class="cd-label">Next match vs ${esc(next.opponent)} in</div>
+      <div class="cd-boxes">` +
+      [[days, "days"], [hrs, "hours"], [mins, "min"], [s, "sec"]]
+        .map(x => `<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join("") + `</div>`;
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+/* ---------- Challenge form (Matches page) ---------- */
+function setupChallengeForm() {
+  const f = document.getElementById("challenge-form");
+  if (!f) return;
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    const d = new FormData(f);
+    const lines = [
+      `Hi! We'd like to play a match against ${TEAM.name}.`,
+      `Team: ${d.get("team")}`,
+      `Grade / school: ${d.get("school")}`,
+      d.get("date")  ? `Preferred date: ${d.get("date")}` : "",
+      d.get("place") ? `Field: ${d.get("place")}` : "",
+      d.get("msg")   ? `Message: ${d.get("msg")}` : ""
+    ].filter(Boolean);
+    window.open("https://wa.me/" + TEAM.whatsapp + "?text=" + encodeURIComponent(lines.join("\n")),
+                "_blank", "noopener");
+  });
+}
+
+/* ---------- Result filters (Matches page) ---------- */
+function setupResultFilters() {
+  const bar = document.getElementById("result-filters");
+  const list = document.getElementById("past-list");
+  if (!bar || !list) return;
+  const opts = [["all", "All"], ["win", "Wins"], ["draw", "Draws"], ["loss", "Losses"]];
+  bar.innerHTML = opts.map(o =>
+    `<button class="chip-btn${o[0] === "all" ? " on" : ""}" data-f="${o[0]}">${o[1]}</button>`).join("");
+  const outcome = m => m.ourScore > m.theirScore ? "win" : m.ourScore < m.theirScore ? "loss" : "draw";
+  bar.addEventListener("click", e => {
+    const b = e.target.closest("[data-f]");
+    if (!b) return;
+    bar.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    const rows = pastMatches().filter(m => b.dataset.f === "all" || outcome(m) === b.dataset.f);
+    list.innerHTML = rows.length ? rows.map(matchCard).join("") : `<p class="empty">No matches here.</p>`;
+  });
+}
+
+/* ---------- Player search and pop-up (Team page) ---------- */
+function setupPlayerSearch() {
+  const s = document.getElementById("player-search");
+  if (!s) return;
+  s.addEventListener("input", () => {
+    const q = s.value.trim().toLowerCase();
+    document.querySelectorAll(".player").forEach(c => {
+      c.style.display = c.textContent.toLowerCase().includes(q) ? "" : "none";
+    });
+  });
+}
+
+function showPlayer(name) {
+  const p = PLAYERS.find(x => x.name === name);
+  if (!p) return;
+  const s = playerStats()[p.name];
+  const ov = document.createElement("div");
+  ov.className = "modal";
+  ov.innerHTML = `<div class="modal-box" role="dialog" aria-modal="true">
+      <button class="modal-x" aria-label="Close">×</button>
+      <div class="shirt big">${esc(p.number)}</div>
+      <h3>${esc(p.name)}${p.captain ? " (C)" : ""}</h3>
+      <p>${esc(p.position)}</p>
+      <div class="modal-stats">
+        <div><b>${s.goals}</b><span>Goals</span></div>
+        <div><b>${s.assists}</b><span>Assists</span></div>
+        <div><b>${s.cleanSheets}</b><span>Clean sheets</span></div>
+      </div></div>`;
+  ov.addEventListener("click", e => { if (e.target === ov || e.target.closest(".modal-x")) ov.remove(); });
+  document.body.appendChild(ov);
+}
+
+/* ---------- Dark mode ---------- */
+function applyTheme(dark) {
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  const b = document.getElementById("theme-btn");
+  if (b) b.textContent = dark ? "☀️" : "🌙";
+}
+function setupTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem("theme"); } catch (e) {}
+  applyTheme(saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.getElementById("theme-btn").addEventListener("click", () => {
+    const dark = document.documentElement.getAttribute("data-theme") !== "dark";
+    applyTheme(dark);
+    try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch (e) {}
+  });
+}
+
 /* ---------- Match card (used on Home and Matches pages) ---------- */
 function matchCard(m) {
   const done = isFinished(m);
