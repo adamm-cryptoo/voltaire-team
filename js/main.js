@@ -290,6 +290,54 @@ function setupTheme() {
   });
 }
 
+// Reads the published Google Sheet and fills in each match's availability
+function parseCSV(text) {
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i + 1] === '"') { cur += '"'; i++; }
+      else if (c === '"') q = false;
+      else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === ",") { row.push(cur); cur = ""; }
+    else if (c === "\n") { row.push(cur); rows.push(row); row = []; cur = ""; }
+    else if (c !== "\r") cur += c;
+  }
+  if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+
+async function loadLiveAvailability() {
+  if (typeof AVAILABILITY_CSV === "undefined" || !AVAILABILITY_CSV) return;
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 4000);                    // give up after 4 seconds
+    const url = AVAILABILITY_CSV + (AVAILABILITY_CSV.includes("?") ? "&" : "?") + "t=" + Date.now();
+    const res = await fetch(url, { signal: ctrl.signal });
+
+    const all = parseCSV(await res.text());
+    const head = all[0].map(h => h.toLowerCase());
+    const iName = head.findIndex(h => h.includes("name"));
+    const iMatch = head.findIndex(h => h.includes("match"));   // -1 if the form has no match question
+    const iAns = head.findIndex(h => h.includes("play"));
+    if (iName < 0 || iAns < 0) return;
+    all.slice(1).forEach(r => {
+      const name = (r[iName] || "").trim(), answer = r[iAns] || "";
+      let m;
+      if (iMatch >= 0) {
+        const want = (r[iMatch] || "").trim().toLowerCase();
+        m = MATCHES.find(x => !isFinished(x) && String(x.opponent).trim().toLowerCase() === want);
+      } else {
+        m = upcomingMatches()[0];
+      }
+      if (m && name) {
+        m.availability = m.availability || {};
+        m.availability[name] = answer;
+      }
+    });
+  } catch (e) { /* if it fails, the site shows what is written in data.js */ }
+}
 /* ---------- Match card (used on Home and Matches pages) ---------- */
 function matchCard(m) {
   const done = isFinished(m);
@@ -443,17 +491,17 @@ function renderField() {
 
 
 /* ---------- Start everything when the page loads ---------- */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   buildHeader();
   setupTheme();
   buildFooter();
+  await loadLiveAvailability();
   const page = document.body.dataset.page;
   if (page === "home") renderHome();
   if (page === "matches") renderMatches();
   if (page === "team") renderTeam();
   if (page === "field") renderField();
 });
-
 document.addEventListener("click", e => {
   const ics = e.target.closest("[data-ics]");
   if (ics) return downloadICS(MATCHES[+ics.dataset.ics]);
