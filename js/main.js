@@ -150,11 +150,15 @@ function kickoff(m) {
 }
 
 /* ---------- Buttons on each match card ---------- */
-function actionsHtml(m) {
+function matchKey(m) { return String(m.id || MATCHES.indexOf(m)); }
+
+function actionsHtml(m, details = true) {
   const i = MATCHES.indexOf(m);
+  const more = details
+    ? `<a class="btn-mini" href="match.html?m=${encodeURIComponent(matchKey(m))}">Details →</a>` : "";
   const cal = !isFinished(m) && kickoff(m)
     ? `<button class="btn-mini" data-ics="${i}">📅 Add to calendar</button>` : "";
-  return `<div class="actions">${cal}<button class="btn-mini" data-share="${i}">📤 Share</button></div>`;
+  return `<div class="actions">${more}${cal}<button class="btn-mini" data-share="${i}">📤 Share</button></div>`;
 }
 
 function downloadICS(m) {
@@ -352,7 +356,7 @@ function matchCard(m) {
   }
 
   return `
-    <article class="card match-card">
+       <article class="card match-card" data-key="${esc(matchKey(m))}">
       <div class="match-top">
         <span class="match-date">${formatDate(m.date)} · ${esc(m.time)}</span>
         ${resultBadge}
@@ -501,6 +505,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (page === "matches") renderMatches();
   if (page === "team") renderTeam();
   if (page === "field") renderField();
+     if (page === "match") renderMatchPage();
+   
 });
 document.addEventListener("click", e => {
   const ics = e.target.closest("[data-ics]");
@@ -509,6 +515,11 @@ document.addEventListener("click", e => {
   if (sh) return shareMatch(MATCHES[+sh.dataset.share]);
   const pl = e.target.closest("[data-player]");
   if (pl) return showPlayer(pl.dataset.player);
+     const card = e.target.closest(".match-card[data-key]");
+  if (card && !e.target.closest("a, button, summary, details")) {
+    location.href = "match.html?m=" + encodeURIComponent(card.dataset.key);
+  }
+   
 });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") document.querySelectorAll(".modal").forEach(m => m.remove());
