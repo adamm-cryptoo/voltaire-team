@@ -40,8 +40,7 @@ const MATCHES = [
      mapEmbedUrl:"",
     ourScore: 8, theirScore: 5,
     notes: "",
-     availability: {},
-  opponentPlayers: [],
+    
   },
   {
     date: "2026-11-05", time: "19:30",
