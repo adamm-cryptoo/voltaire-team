@@ -366,7 +366,8 @@ function matchCard(m) {
         ${scoreHtml}
         <span class="team-b">${esc(m.opponent)}</span>
       </div>
-      <p class="match-place">📍 ${esc(m.location)}</p>
+        <p class="match-place">📍 ${esc(m.location)}</p>
+      ${m.referee ? `<p class="match-place" style="margin-top:4px">🧑‍⚖️ Referee: ${esc(m.referee)}</p>` : ""}
       ${m.notes ? `<p class="match-notes">${esc(m.notes)}</p>` : ""}${cleanSheetHtml(m)}${goalsHtml(m)}${availabilityHtml(m)}${opponentHtml(m)}
         ${actionsHtml(m)}
     </article>`;
