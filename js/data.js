@@ -40,7 +40,7 @@ const MATCHES = [
      mapEmbedUrl:"",
     ourScore: null, theirScore: null,
     notes: "",
-    referee: "Karam";
+    referee: "Karam",
     
   },
   {
