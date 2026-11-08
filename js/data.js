@@ -41,7 +41,7 @@ const MATCHES = [
     ourScore: null, theirScore: null,
     notes: "",
     referee: "Karam",
-     availability: " AVAILABILITY_CSV"
+     availability: " AVAILABILITY_CSV",
     
   },
   {
