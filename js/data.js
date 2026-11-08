@@ -32,14 +32,15 @@ const AVAILABILITY_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQTSI
    • date format is YYYY-MM-DD, time is 24-hour HH:MM            */
 const MATCHES = [
   {
-    date: "TBD", time: "TBD",
-    opponent: "TBD",
-    location: "TBD",
+    date: "2026-11-13", time: "8:00",
+    opponent: "Kipling",
+    location: "NGU",
      fieldAddress: "",
      mapLink: "",
      mapEmbedUrl:"",
     ourScore: null, theirScore: null,
     notes: "",
+    referee: "Karam";
     
   },
   {
