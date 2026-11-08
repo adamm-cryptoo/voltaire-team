@@ -322,9 +322,9 @@ async function loadLiveAvailability() {
 
     const all = parseCSV(await res.text());
     const head = all[0].map(h => h.toLowerCase());
-    const iName = head.findIndex(h => h.includes("name"));
-    const iMatch = head.findIndex(h => h.includes("match"));   // -1 if the form has no match question
-    const iAns = head.findIndex(h => h.includes("play"));
+    const iName = 1;
+    const iMatch = -1;   // -1 if the form has no match question
+    const iAns = 2;
     if (iName < 0 || iAns < 0) return;
     all.slice(1).forEach(r => {
       const name = (r[iName] || "").trim(), answer = r[iAns] || "";
@@ -337,7 +337,7 @@ async function loadLiveAvailability() {
       }
       if (m && name) {
         m.availability = m.availability || {};
-        m.availability[name] = answer;
+        m.availability[name] = answer.trim().toLowerCase();
       }
     });
   } catch (e) { /* if it fails, the site shows what is written in data.js */ }
