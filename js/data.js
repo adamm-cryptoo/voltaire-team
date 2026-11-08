@@ -41,7 +41,7 @@ const MATCHES = [
     ourScore: null, theirScore: null,
     notes: "",
     referee: "Karam",
-     availability: " AVAILABILITY_CSV",
+     availability: "https://docs.google.com/forms/d/e/1FAIpQLSco6tIFeaCk4iaqdTMXRMx2VZLGKJsY0C0aevwXVugE7UDfEQ/viewform?usp=dialog",
     
   },
   {
