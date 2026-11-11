@@ -39,8 +39,8 @@ const MATCHES = [
      mapLink: "",
      mapEmbedUrl:"",
     ourScore: null, theirScore: null,
-    notes: "",
-    referee: "Karam",
+    notes: "Get Ready!",
+    referee: "Karam/Fares",
      availability: {},
     
   },
